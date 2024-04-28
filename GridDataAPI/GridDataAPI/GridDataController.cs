@@ -32,12 +32,12 @@ namespace GridDataAPI
         /// End datetime
         /// </param>
         /// <returns>
-        /// The latest value within the two given datetime. When failed, return null.
+        /// The latest value within the two given datetime. When failed, return null. If no value selected, return empty string.
         /// </returns>
         public string? GetLatestValue(DateTime startTime, DateTime endTime)
         {
             // SQL Query
-            string query = $"select\r\n\ttop 1 value\r\n  from \r\n\tMeasure\r\n  where\r\n\trecord_time >= '{startTime}' and record_time <= '{endTime}'\r\n  order by\r\n\trecord_time desc";
+            string query = $"select\r\n\ttop 1 value\r\n  from \r\n\tMeasures\r\n  where\r\n\trecord_time >= '{startTime}' and record_time <= '{endTime}'\r\n  order by\r\n\trecord_time desc";
 
             try
             {
@@ -48,9 +48,15 @@ namespace GridDataAPI
                     {
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            reader.Read();
+                            string result = "";
+ 
+                            if (reader.HasRows)
+                            {
+                                reader.Read();
+                                result = reader["value"].ToString();
+                            }
 
-                            return reader["value"].ToString();
+                            return result;
                         }
                     }
                 }
@@ -76,12 +82,12 @@ namespace GridDataAPI
         /// Collected datetime
         /// </param>
         /// <returns>
-        /// A list of values corresponding to the collected time and between start time and end time. When failed, return null.
+        /// A list of values corresponding to the collected time and between start time and end time. When failed or no valued selected, return null.
         /// </returns>
         public List<string>? GetCollectedData(DateTime startTime, DateTime endTime, DateTime collectedTime)
         {
             // SQL Query
-            string query = $"select \r\n\tnode_id, value, record_time\r\n  from \r\n\tMeasure\r\n  where\r\n\trecord_time >= '{startTime}' and record_time <= '{endTime}'\r\n    and\r\n\ttarget_time = '{collectedTime}'";
+            string query = $"select \r\n\tnode_id, value, record_time\r\n  from \r\n\tMeasures\r\n  where\r\n\trecord_time >= '{startTime}' and record_time <= '{endTime}'\r\n    and\r\n\ttarget_time = '{collectedTime}'";
 
             try
             {

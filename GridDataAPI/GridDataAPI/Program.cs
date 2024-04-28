@@ -1,13 +1,12 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using GridDataAPI;
-using System.Data.SqlClient;
 
 GridDataController gridDataController = new GridDataController();
 
 // Change Datetime to test different result.
-DateTime startTime = DateTime.Parse("2024/04/27 20:00");
-DateTime endTime = DateTime.Parse("2024/04/27 23:00");
-DateTime collectedTime = DateTime.Parse("2024/04/28 23:00");
+DateTime startTime = DateTime.Parse("2024/04/28 20:00");
+DateTime endTime = DateTime.Parse("2024/04/28 23:00");
+DateTime collectedTime = DateTime.Parse("2024/04/29 23:00");
 
 // Result of API that will accept a start datetime and end datetime. The API should return the latest value for each timestamp in the date range. 
 string? latestValue = gridDataController.GetLatestValue(startTime, endTime);
